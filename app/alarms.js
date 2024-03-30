@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
-import { Text, View, ScrollView, Pressable, StyleSheet } from "react-native";
+import { Text, View, Pressable, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, Stack, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity } from "react-native";
+import { Slider } from "@miblanchard/react-native-slider";
 import {
-  calculateAlarmTime,
-  calculateTimeTilRing,
-  findNextSelectedDay,
-} from "../helper/dates";
+  registerTaskAsync,
+  TaskManager,
+  setNotificationHandler,
+  Notificationresponse,
+} from "expo-task-manager";
+import { calculateTimeTilRing, findNextSelectedDay } from "../helper/dates";
+import { AlarmEvents, useAlarmEvents } from "../states";
+
+const ALARM_TASK_NAME = "ALARM_TASK";
 
 const Alarms = () => {
   const router = useRouter(); // Router For Back Header Button
@@ -48,6 +54,11 @@ const Alarms = () => {
   const [ring, setRing] = useState(new Date()); // Time User Selects For Alarm To Ring
   const [closest, setClosest] = useState(null); // Closet Upcoming Day From Today That User Has Selected To Have Alarm Repeat
 
+  const [volume, setVolume] = useState(100);
+  const { activeAlarm, setActiveAlarm } = useAlarmEvents();
+  console.log(activeAlarm);
+  useEffect(() => {}, []);
+
   // Each Time User Selects A Day For Alarm To Repeat, Check And Update Closest Day From Today
   useEffect(() => {
     let nextDay = findNextSelectedDay(daySelected);
@@ -60,10 +71,9 @@ const Alarms = () => {
     }
   };
 
-  const handleAlarm = () => {
-    // if (time)
+  const handleAlarm = async () => {
+    setActiveAlarm(ring);
   };
-  console.log(closest);
   return (
     <SafeAreaView
       style={{
@@ -129,8 +139,11 @@ const Alarms = () => {
           display="spinner"
           value={timeNow}
           onChange={onChange}
+          textColor="#031B0F" // If time not displayed on IOS change back to Black
           style={{
             marginTop: 10,
+            backgroundColor: "white",
+            width: "100%",
             height: 140,
             borderColor: "#EFF3F2",
             borderStyle: "solid",
@@ -138,7 +151,14 @@ const Alarms = () => {
             borderRadius: 10,
           }}
         />
-        <Text style={{ marginTop: 32, fontSize: 14, fontWeight: "600" }}>
+        <Text
+          style={{
+            marginTop: 32,
+            fontSize: 14,
+            fontWeight: "600",
+            color: "#031B0F",
+          }}
+        >
           Repeat
         </Text>
         <View
@@ -177,6 +197,24 @@ const Alarms = () => {
             </Pressable>
           ))}
         </View>
+        <Text
+          style={{
+            marginTop: 32,
+            fontSize: 14,
+            fontWeight: "600",
+            color: "#031B0F",
+          }}
+        >
+          Ring Volume
+        </Text>
+        <View>
+          <Slider
+            thumbStyle={{ backgroundColor: "#15BA5A" }}
+            value={volume}
+            onValueChange={(value) => setVolume(value)}
+            minimumTrackTintColor="#15BA5A"
+          />
+        </View>
       </View>
       <View
         style={{
@@ -196,7 +234,7 @@ const Alarms = () => {
             flex: 1,
           }}
         >
-          <Text style={{ textAlign: "center" }}>
+          <Text style={{ color: "#354F52", textAlign: "center" }}>
             {calculateTimeTilRing(timeNow, ring, closest)}
           </Text>
         </View>
@@ -247,6 +285,7 @@ const styles = StyleSheet.create({
     borderColor: "#EFF3F2",
   },
   txtDefault: {
+    color: "#031B0F",
     textAlign: "center",
     fontSize: 12,
   },
@@ -267,6 +306,9 @@ const styles = StyleSheet.create({
   },
   setDisabled: {
     backgroundColor: "#8ACDA6",
+  },
+  thumbStyle: {
+    backgroundColor: "#15BA5A",
   },
 });
 export default Alarms;
