@@ -16,7 +16,7 @@ const WeekProgress = () => {
     for (let i = 0; i < 7; i++) {
       if (date.getMonth() !== currentMonth) {
         // If the month has changed, use the appropriate day of the month
-        days.push(1);
+        days.push(i);
       } else {
         days.push(date.getDate());
       }
