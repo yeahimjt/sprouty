@@ -4,13 +4,26 @@
     "web": {
       "bundler": "metro"
     },
-    "plugins": ["expo-secure-store", "expo-localization"],
+    "plugins": [
+      "expo-secure-store",
+      "expo-localization"
+    ],
     "ios": {
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch", "remote-notification"]
-      }
+        "UIBackgroundModes": [
+          "location",
+          "fetch",
+          "remote-notification"
+        ]
+      },
+      "bundleIdentifier": "com.yeahimjt.sprouty"
     },
     "name": "sprouty",
-    "slug": "sprouty"
+    "slug": "sprouty",
+    "extra": {
+      "eas": {
+        "projectId": "dd4e88b8-12cd-4e33-8dd1-0e135dc7f4bd"
+      }
+    }
   }
 }
