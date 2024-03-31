@@ -14,7 +14,6 @@ import {
 } from "expo-task-manager";
 import { calculateTimeTilRing, findNextSelectedDay } from "../helper/dates";
 import { AlarmEvents, useAlarmEvents } from "../states";
-
 const ALARM_TASK_NAME = "ALARM_TASK";
 
 const Alarms = () => {
@@ -56,7 +55,7 @@ const Alarms = () => {
 
   const [volume, setVolume] = useState(100);
   const { activeAlarm, setActiveAlarm } = useAlarmEvents();
-  console.log(activeAlarm);
+
   useEffect(() => {}, []);
 
   // Each Time User Selects A Day For Alarm To Repeat, Check And Update Closest Day From Today
@@ -77,7 +76,7 @@ const Alarms = () => {
   return (
     <SafeAreaView
       style={{
-        marginHorizontal: 20,
+        paddingHorizontal: 20,
         backgroundColor: "#FFFFFF",
         height: "100%",
       }}
@@ -223,6 +222,7 @@ const Alarms = () => {
           flexDirection: "row",
           justifyContent: "space-between",
           width: "100%",
+          left: 20,
           gap: 20,
         }}
       >
